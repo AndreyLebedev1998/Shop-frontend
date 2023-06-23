@@ -1,0 +1,33 @@
+.header {
+  width: 100%;
+  height: 100px;
+  background-color: rgb(150, 247, 247);
+}
+
+.link {
+  width: 100px;
+  height: 70px;
+  text-decoration: none;
+  margin-left: 4%;
+  margin-top: 20px;
+  font-size: 1.4rem;
+  float: left;
+  color: rgb(61, 54, 54);
+}
+
+.home {
+  float: right;
+  margin-right: 4%;
+  margin-top: 20px;
+  text-decoration: none;
+  font-size: 1.4rem;
+  color: rgb(61, 54, 54);
+}
+
+.home:active {
+  font-size: 1.25rem;
+}
+
+.link:active {
+  font-size: 1.25rem;
+}

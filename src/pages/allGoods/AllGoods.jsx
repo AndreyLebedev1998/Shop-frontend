@@ -1,29 +1,27 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-const Headphone = () => {
+const AllGoods = () => {
   const products = useSelector((state) => state.product.data);
-
   return (
     <div>
-      <h1>Наушники</h1>
-      {products ? (
-        products
-          .filter((el) => el.categoryId === 3)
-          .map((el) => {
+      <div className="allProduct">
+        {products ? (
+          products.map((el) => {
             return (
-              <div className="product" onClick={() => console.log(el._id)}>
+              <div className="product">
                 <h1>{el.name}</h1>
                 <img src={el.imageUrl} />
                 <p>{el.price} рублей</p>
               </div>
             );
           })
-      ) : (
-        <h1>Секундочку...</h1>
-      )}
+        ) : (
+          <h1>Секундочку...</h1>
+        )}
+      </div>
     </div>
   );
 };
 
-export default Headphone;
+export default AllGoods;

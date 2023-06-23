@@ -1,3 +1,18 @@
 .App {
   text-align: center;
 }
+
+.allProduct {
+  margin-left: 7%;
+}
+
+.product {
+  display: inline;
+  float: left;
+  margin-left: 30px;
+}
+
+img {
+  width: 400px;
+  height: 250px;
+}
