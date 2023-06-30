@@ -1,15 +1,9 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "../axios";
-import { fetchGetAllGoods } from "../store/slices/product";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const products = useSelector((state) => state.product.data);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchGetAllGoods());
-  }, []);
 
   return (
     <>
@@ -21,8 +15,11 @@ const Home = () => {
               return (
                 <div className="product">
                   <h1>{el.name}</h1>
-                  <img src={el.imageUrl} />
+                  <Link to={`/goods/${el._id}`}>
+                    <img src={el.imageUrl} />
+                  </Link>
                   <p>{el.price} рублей</p>
+                  <button className="buy">Купить</button>
                 </div>
               );
             })

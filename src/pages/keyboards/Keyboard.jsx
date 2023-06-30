@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Keyboard = () => {
   const products = useSelector((state) => state.product.data);
@@ -13,8 +14,11 @@ const Keyboard = () => {
             return (
               <div className="product">
                 <h1>{el.name}</h1>
-                <img src={el.imageUrl} />
+                <Link to={`/goods/${el._id}`}>
+                  <img src={el.imageUrl} />
+                </Link>
                 <p>{el.price} рублей</p>
+                <button className="buy">Купить</button>
               </div>
             );
           })

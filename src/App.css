@@ -2,8 +2,12 @@
   text-align: center;
 }
 
+.active {
+  background-color: rgb(22, 188, 22);
+  border-radius: 10px;
+}
+
 .allProduct {
-  margin-left: 7%;
 }
 
 .product {
@@ -15,4 +19,20 @@
 img {
   width: 400px;
   height: 250px;
+  cursor: pointer;
+}
+
+.buy {
+  font-size: 1.7rem;
+  width: 40%;
+  height: 50px;
+  border-radius: 7px;
+  border: 1px solid rgb(132, 132, 131);
+  background-color: rgb(168, 166, 166);
+  cursor: pointer;
+}
+
+.buy:active {
+  color: white;
+  background-color: rgb(53, 144, 53);
 }
