@@ -6,9 +6,20 @@ export const fetchGetAllGoods = createAsyncThunk("/goods", async () => {
   return data;
 });
 
+export const getBasketUser = createAsyncThunk("basketUser", async (id) => {
+  const { data } = await axios.get(`/auth/basket/${id}`);
+  return data;
+});
+
 const initialState = {
-  data: null,
-  status: "loading",
+  good: {
+    data: null,
+    status: "loading",
+  },
+  basket: {
+    data: null,
+    status: "loading",
+  },
 };
 
 const productSlice = createSlice({
@@ -17,16 +28,28 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: {
     [fetchGetAllGoods.pending]: (state) => {
-      state.status = "loading";
-      state.data = null;
+      state.good.status = "loading";
+      state.good.data = null;
     },
     [fetchGetAllGoods.fulfilled]: (state, action) => {
-      state.status = "loaded";
-      state.data = action.payload;
+      state.good.status = "loaded";
+      state.good.data = action.payload;
     },
     [fetchGetAllGoods.rejected]: (state) => {
-      state.status = "error";
-      state.data = null;
+      state.good.status = "error";
+      state.good.data = null;
+    },
+    [getBasketUser.pending]: (state) => {
+      state.basket.status = "loading";
+      state.basket.data = null;
+    },
+    [getBasketUser.fulfilled]: (state, action) => {
+      state.basket.status = "loaded";
+      state.basket.data = action.payload;
+    },
+    [getBasketUser.rejected]: (state) => {
+      state.basket.status = "error";
+      state.basket.data = null;
     },
   },
 });

@@ -1,9 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import style from "./header.module.css";
+import { loginOut } from "../../store/slices/authorization";
 
 const goods = [
-  { name: "Все", element: "/allGoods" },
+  { name: "Главная", element: "/" },
   { name: "Клавиатуры", element: "/goods/keyboards" },
   { name: "Наушники", element: "/goods/headphones" },
   { name: "Ноутбуки", element: "/goods/laptops" },
@@ -12,6 +14,8 @@ const goods = [
 ];
 
 const Header = () => {
+  const auth = useSelector((state) => state.auth.data);
+  const dispatch = useDispatch();
   return (
     <div>
       <div className={style.header}>
@@ -24,9 +28,25 @@ const Header = () => {
             </div>
           );
         })}
-        <NavLink className={style.home} to="/">
-          Главная
-        </NavLink>
+        <div className={style.authorization}>
+          {auth ? (
+            <button
+              className={style.logOut}
+              onClick={() => dispatch(loginOut())}
+            >
+              Выход
+            </button>
+          ) : (
+            <>
+              <NavLink to="/entry" className={style.link}>
+                Вход
+              </NavLink>
+              <NavLink to="/register" className={style.link}>
+                Регистрация
+              </NavLink>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import style from "./entry.module.css";
+import { authorization } from "../../store/slices/authorization";
 import { Navigate } from "react-router-dom";
-import { register } from "../../store/slices/authorization";
-import style from "./register.module.css";
 
-const Register = () => {
+const Entry = () => {
   const auth = useSelector((state) => state.auth.data);
   const dispatch = useDispatch();
-  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const entry = (params) => {
+    dispatch(authorization(params));
+  };
 
   if (auth) {
     window.localStorage.setItem("token", auth.token);
@@ -21,14 +24,8 @@ const Register = () => {
 
   return (
     <>
-      <div className={style.register}>
-        <h1>Регистрация</h1>
-        <input
-          type="text"
-          placeholder="Ваше имя"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
+      <div className={style.entry}>
+        <h1>Вход</h1>
         <input
           type="email"
           placeholder="Ваш email"
@@ -41,14 +38,10 @@ const Register = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button
-          onClick={() => dispatch(register({ fullName, email, password }))}
-        >
-          Зарегестрироваться
-        </button>
+        <button onClick={() => entry({ email, password })}>Войти</button>
       </div>
     </>
   );
 };
 
-export default Register;
+export default Entry;

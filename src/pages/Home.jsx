@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Home = () => {
-  const products = useSelector((state) => state.product.data);
+  const products = useSelector((state) => state.product.good.data);
 
   return (
     <>
@@ -24,7 +24,7 @@ const Home = () => {
               );
             })
             .sort(() => 0.5 - Math.random())
-            .slice(0, 3)
+            .slice(0, 4)
         ) : (
           <h1>Секундочку...</h1>
         )}

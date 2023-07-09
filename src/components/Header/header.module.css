@@ -13,7 +13,6 @@
   margin-top: 10px;
   font-size: 1.4rem;
   float: left;
-  color: rgb(61, 54, 54);
 }
 
 .home {
@@ -25,7 +24,6 @@
   margin-top: 10px;
   text-decoration: none;
   font-size: 1.4rem;
-  color: rgb(61, 54, 54);
 }
 
 .home:active {
@@ -34,4 +32,30 @@
 
 .link:active {
   font-size: 1.25rem;
+}
+
+.authorization {
+  width: 20%;
+  height: 40px;
+  margin-right: 30px;
+  float: right;
+}
+
+.authorization a {
+  width: 42%;
+}
+
+.logOut {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  background-color: rgb(227, 35, 35);
+  color: white;
+  cursor: pointer;
+}
+
+.logOut:active {
+  padding: 8px;
 }

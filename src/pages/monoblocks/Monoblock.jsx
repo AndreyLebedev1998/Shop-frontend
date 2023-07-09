@@ -1,31 +1,104 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "../../axios.js";
+import {
+  getBasketUser,
+  buyOneGood,
+  plusQtyBasket,
+} from "../../store/slices/basket.js";
 
 const Monoblock = () => {
-  const products = useSelector((state) => state.product.data);
+  const products = useSelector((state) => state.product.good.data);
+  const basket = useSelector((state) => state.basket.basket.data);
+  const basketPlus = useSelector((state) => state.basket.basketPlus.data);
+  const buyOneGoodinBasket = useSelector((state) => state.basket.buyGood.data);
+  const auth = useSelector((state) => state.auth.data);
+  const dispatch = useDispatch();
+
+  const buyGood = (id, name, imageUrl, price, categoryId, qtyInBasket) => {
+    dispatch(getBasketUser(auth._id));
+    if (basket.length === 0) {
+      return axios.post(`/auth/basket/${auth._id}`, {
+        id,
+        name,
+        imageUrl,
+        price,
+        categoryId,
+        qtyInBasket: qtyInBasket + 1,
+      });
+    }
+
+    if (basket.find((el) => el.id == id)) {
+      dispatch(plusQtyBasket({ _id: auth._id, id, qtyInBasket }));
+      if (basketPlus) {
+        return dispatch(getBasketUser(auth._id));
+      }
+    } else {
+      dispatch(
+        buyOneGood({
+          _id: auth._id,
+          id,
+          name,
+          imageUrl,
+          price,
+          categoryId,
+          qtyInBasket,
+        })
+      );
+      if (buyOneGoodinBasket) {
+        return dispatch(getBasketUser(auth._id));
+      }
+    }
+  };
   return (
-    <div>
+    <>
       <h1>Моноблоки</h1>
-      {products ? (
-        products
-          .filter((el) => el.categoryId === 5)
-          .map((el) => {
-            return (
-              <div className="product">
-                <h1>{el.name}</h1>
-                <Link to={`/goods/${el._id}`}>
-                  <img src={el.imageUrl} />
-                </Link>
-                <p>{el.price} рублей</p>
-                <button className="buy">Купить</button>
-              </div>
-            );
-          })
-      ) : (
-        <h1>Секундочку...</h1>
-      )}
-    </div>
+      <div className="allProduct">
+        {products ? (
+          products
+            .filter((el) => el.categoryId === 5)
+            .map((el) => {
+              return (
+                <div className="product">
+                  <h1>{el.name}</h1>
+                  <Link to={`/goods/${el._id}`}>
+                    <img src={el.imageUrl} />
+                  </Link>
+                  <p>{el.price} рублей</p>
+                  <button
+                    onClick={() =>
+                      buyGood(
+                        el._id,
+                        el.name,
+                        el.imageUrl,
+                        el.price,
+                        el.categoryId,
+                        el.qtyInBasket
+                      )
+                    }
+                    style={
+                      basket
+                        ? {
+                            cursor: "pointer",
+                          }
+                        : {
+                            cursor: "progress",
+                          }
+                    }
+                    disabled={basket ? false : true}
+                    className="buy"
+                  >
+                    Купить
+                  </button>
+                </div>
+              );
+            })
+        ) : (
+          <h1>Секундочку...</h1>
+        )}
+      </div>
+    </>
   );
 };
 
