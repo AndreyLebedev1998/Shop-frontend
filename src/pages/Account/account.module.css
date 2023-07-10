@@ -1,0 +1,42 @@
+.account {
+  display: flex;
+  align-items: flex-end;
+  align-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin: auto;
+}
+
+.account button {
+  width: 8%;
+  height: 45px;
+  font-size: 1.3rem;
+  margin: auto;
+  background-color: antiquewhite;
+  border: none;
+  border-radius: 5px;
+}
+
+.account input[type="text"],
+input[type="tel"] {
+  width: 25%;
+  height: 30px;
+  margin-top: 30px;
+  border: 1px solid black;
+}
+
+.account input[type="checkbox"] {
+  width: 4mm;
+  height: 4mm;
+  cursor: pointer;
+}
+
+.account input,
+label,
+p {
+  font-size: 1.3rem;
+}
+
+.gender {
+  margin: auto;
+}

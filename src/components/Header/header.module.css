@@ -59,3 +59,25 @@
 .logOut:active {
   padding: 8px;
 }
+
+.account {
+  font-size: 3rem;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.accountList {
+  margin-right: 35px;
+}
+
+.accountList ul li {
+  list-style: none;
+  font-size: 1.3rem;
+  background-color: white;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.accountList ul li a {
+  color: black;
+}

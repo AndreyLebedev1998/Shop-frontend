@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { MdDeleteForever } from "react-icons/md";
 import {
@@ -17,7 +17,7 @@ import axios from "../../axios.js";
 import style from "./basket.module.css";
 
 const Basket = () => {
-  const auth = useSelector((state) => state.auth.data);
+  const auth = useSelector((state) => state.auth.auth.data);
   const basket = useSelector((state) => state.basket.basket.data);
   const dispatch = useDispatch();
   const authId = JSON.parse(window.localStorage.getItem("auth"));
@@ -40,6 +40,10 @@ const Basket = () => {
   const plusQtyGood = (id, qtyInBasket) => {
     dispatch(plusQtyBasket({ _id: auth._id, id, qtyInBasket }));
   };
+
+  if (!window.localStorage.getItem("token")) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div>

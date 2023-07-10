@@ -5,7 +5,7 @@ import { register } from "../../store/slices/authorization";
 import style from "./register.module.css";
 
 const Register = () => {
-  const auth = useSelector((state) => state.auth.data);
+  const auth = useSelector((state) => state.auth.auth.data);
   const dispatch = useDispatch();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");

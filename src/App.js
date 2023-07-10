@@ -18,6 +18,7 @@ import Entry from "./pages/Entry/Entry";
 import Register from "./pages/Register/Register";
 import { getAuthMe } from "./store/slices/authorization";
 import Basket from "./pages/Basket/Basket";
+import Account from "./pages/Account/Account";
 
 function App() {
   const auth = useSelector((state) => state.auth.data);
@@ -44,15 +45,8 @@ function App() {
         <Route path="/entry" element={<Entry />} />
         <Route path="/register" element={<Register />} />
         <Route path="/basket" element={<Basket />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
-      {auth ? (
-        <Link to="/basket">
-          <BsBasketFill className="basket" />
-        </Link>
-      ) : (
-        ""
-      )}
-      <p className="basketLength">{auth ? auth.basket.length : ""}</p>
     </div>
   );
 }

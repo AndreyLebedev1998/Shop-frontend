@@ -5,7 +5,7 @@ import { authorization } from "../../store/slices/authorization";
 import { Navigate } from "react-router-dom";
 
 const Entry = () => {
-  const auth = useSelector((state) => state.auth.data);
+  const auth = useSelector((state) => state.auth.auth.data);
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

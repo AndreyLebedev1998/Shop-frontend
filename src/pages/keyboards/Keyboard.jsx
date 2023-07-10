@@ -13,7 +13,7 @@ const Keyboard = () => {
   const basket = useSelector((state) => state.basket.basket.data);
   const basketPlus = useSelector((state) => state.basket.basketPlus.data);
   const buyOneGoodinBasket = useSelector((state) => state.basket.buyGood.data);
-  const auth = useSelector((state) => state.auth.data);
+  const auth = useSelector((state) => state.auth.auth.data);
   const dispatch = useDispatch();
 
   const buyGood = (id, name, imageUrl, price, categoryId, qtyInBasket) => {
@@ -67,31 +67,35 @@ const Keyboard = () => {
                     <img src={el.imageUrl} />
                   </Link>
                   <p>{el.price} рублей</p>
-                  <button
-                    onClick={() =>
-                      buyGood(
-                        el._id,
-                        el.name,
-                        el.imageUrl,
-                        el.price,
-                        el.categoryId,
-                        el.qtyInBasket
-                      )
-                    }
-                    style={
-                      basket
-                        ? {
-                            cursor: "pointer",
-                          }
-                        : {
-                            cursor: "progress",
-                          }
-                    }
-                    disabled={basket ? false : true}
-                    className="buy"
-                  >
-                    Купить
-                  </button>
+                  {auth ? (
+                    <button
+                      onClick={() =>
+                        buyGood(
+                          el._id,
+                          el.name,
+                          el.imageUrl,
+                          el.price,
+                          el.categoryId,
+                          el.qtyInBasket
+                        )
+                      }
+                      style={
+                        basket
+                          ? {
+                              cursor: "pointer",
+                            }
+                          : {
+                              cursor: "progress",
+                            }
+                      }
+                      disabled={basket ? false : true}
+                      className="buy"
+                    >
+                      Купить
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             })

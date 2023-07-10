@@ -13,7 +13,7 @@ const Monoblock = () => {
   const basket = useSelector((state) => state.basket.basket.data);
   const basketPlus = useSelector((state) => state.basket.basketPlus.data);
   const buyOneGoodinBasket = useSelector((state) => state.basket.buyGood.data);
-  const auth = useSelector((state) => state.auth.data);
+  const auth = useSelector((state) => state.auth.auth.data);
   const dispatch = useDispatch();
 
   const buyGood = (id, name, imageUrl, price, categoryId, qtyInBasket) => {
