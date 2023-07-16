@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import style from "./header.module.css";
-import { loginOut } from "../../store/slices/authorization";
+import { getAuthMe, loginOut } from "../../store/slices/authorization";
+import { computeTotalQty, getBasketUser } from "../../store/slices/basket";
 
 const goods = [
   { name: "Главная", element: "/" },
@@ -16,8 +17,25 @@ const goods = [
 
 const Header = () => {
   const auth = useSelector((state) => state.auth.auth.data);
+  const basket = useSelector((state) => state.basket.basket.data);
+  const totalQtyGoods = useSelector((state) => state.basket.basket.total);
   const dispatch = useDispatch();
   const [account, setAccount] = useState(false);
+
+  let totalQty = 0;
+
+  useEffect(() => {
+    dispatch(getAuthMe());
+    if (auth) {
+      dispatch(getBasketUser(auth._id));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (basket) {
+      dispatch(computeTotalQty(totalQty));
+    }
+  }, [basket]);
 
   const onClickLogout = () => {
     if (window.confirm("Вы действительно хотите выйти")) {
@@ -51,8 +69,15 @@ const Header = () => {
                       <Link to="/account">Аккаунт</Link>
                     </li>
                     <li>
-                      <Link to="/basket">Корзина</Link>
+                      <Link to="/basket">Корзина {totalQtyGoods}</Link>
                     </li>
+                    {auth && auth.admin ? (
+                      <li>
+                        <Link to="/deliveryControl">Заказы</Link>
+                      </li>
+                    ) : (
+                      ""
+                    )}
                     <li onClick={onClickLogout}>Выход</li>
                   </ul>
                 </div>

@@ -55,6 +55,7 @@ const initialState = {
     data: null,
     status: "loading",
     count: 2,
+    total: 0,
   },
   basketPlus: {
     data: null,
@@ -96,6 +97,14 @@ const basketSlice = createSlice({
       state.basket.data = state.basket.data.filter((el) => {
         return el.id !== action.payload.id;
       });
+    },
+    computeTotalQty: (state, action) => {
+      state.basket.data.map((el) => {
+        return (state.basket.total = action.payload += el.qtyInBasket);
+      });
+    },
+    deleteAllGood: (state) => {
+      state.basket.total = 0;
     },
   },
   extraReducers: {
@@ -164,4 +173,10 @@ const basketSlice = createSlice({
 
 export const basketReducer = basketSlice.reducer;
 
-export const { countPlus, countMinus, deleteGood } = basketSlice.actions;
+export const {
+  countPlus,
+  countMinus,
+  deleteGood,
+  computeTotalQty,
+  deleteAllGood,
+} = basketSlice.actions;

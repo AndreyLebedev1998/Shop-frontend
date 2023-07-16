@@ -19,9 +19,11 @@ import Register from "./pages/Register/Register";
 import { getAuthMe } from "./store/slices/authorization";
 import Basket from "./pages/Basket/Basket";
 import Account from "./pages/Account/Account";
+import Delivery from "./pages/Delivery/Delivery";
+import DeliveryControl from "./pages/DeliveryControl/DeliveryControl";
 
 function App() {
-  const auth = useSelector((state) => state.auth.data);
+  const auth = useSelector((state) => state.auth.auth.data);
   const dispatch = useDispatch();
   const authId = JSON.parse(window.localStorage.getItem("auth"));
 
@@ -46,6 +48,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/basket" element={<Basket />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/delivery" element={<Delivery />} />
+        <Route path="/deliveryControl" element={<DeliveryControl />} />
       </Routes>
     </div>
   );

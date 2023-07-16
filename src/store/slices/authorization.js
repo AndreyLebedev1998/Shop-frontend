@@ -18,13 +18,19 @@ export const register = createAsyncThunk("register", async (params) => {
 });
 
 export const updateUser = createAsyncThunk("updateUser", async (params) => {
-  const { data } = axios.patch(`/auth/update/me/${params._id}`, {
+  const { data } = await axios.patch(`/auth/update/me/${params._id}`, {
     fullName: params.fullName,
     lastName: params.lastName,
     gender: params.gender,
     adress: params.adress,
     telephone: params.telephone,
   });
+
+  return data;
+});
+
+export const deleteAccount = createAsyncThunk("deleteAccount", async (id) => {
+  const { data } = await axios.delete(`/auth/delete/${id}`);
 
   return data;
 });
@@ -45,6 +51,14 @@ const initialState = {
   },
   telephone: {
     text: "",
+  },
+  updateUser: {
+    data: null,
+    status: "loading",
+  },
+  deleteUser: {
+    data: null,
+    status: "loading",
   },
 };
 
@@ -109,6 +123,30 @@ const authSlice = createSlice({
     [register.rejected]: (state) => {
       state.auth.data = null;
       state.auth.status = "error";
+    },
+    [updateUser.pending]: (state) => {
+      state.updateUser.data = null;
+      state.updateUser.status = "loading";
+    },
+    [updateUser.fulfilled]: (state, action) => {
+      state.updateUser.data = action.payload;
+      state.updateUser.status = "loaded";
+    },
+    [updateUser.rejected]: (state) => {
+      state.updateUser.data = null;
+      state.updateUser.status = "error";
+    },
+    [deleteAccount.pending]: (state) => {
+      state.deleteUser.data = null;
+      state.deleteUser.status = "loading";
+    },
+    [deleteAccount.fulfilled]: (state, action) => {
+      state.deleteUser.data = action.payload;
+      state.deleteUser.status = "loaded";
+    },
+    [deleteAccount.rejected]: (state) => {
+      state.deleteUser.data = null;
+      state.deleteUser.status = "error";
     },
   },
 });

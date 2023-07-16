@@ -17,22 +17,14 @@ const Keyboard = () => {
   const dispatch = useDispatch();
 
   const buyGood = (id, name, imageUrl, price, categoryId, qtyInBasket) => {
-    dispatch(getBasketUser(auth._id));
-    if (basket.length === 0) {
-      return axios.post(`/auth/basket/${auth._id}`, {
-        id,
-        name,
-        imageUrl,
-        price,
-        categoryId,
-        qtyInBasket: qtyInBasket + 1,
-      });
-    }
-
     if (basket.find((el) => el.id == id)) {
-      dispatch(plusQtyBasket({ _id: auth._id, id, qtyInBasket }));
-      if (basketPlus) {
-        return dispatch(getBasketUser(auth._id));
+      if (basket) {
+        dispatch(plusQtyBasket({ _id: auth._id, id, qtyInBasket })).then(() =>
+          dispatch(getBasketUser(auth._id)).catch((error) => {
+            console.error(error);
+            alert("Не удалось добавить товар");
+          })
+        );
       }
     } else {
       dispatch(
@@ -45,10 +37,12 @@ const Keyboard = () => {
           categoryId,
           qtyInBasket,
         })
-      );
-      if (buyOneGoodinBasket) {
-        return dispatch(getBasketUser(auth._id));
-      }
+      )
+        .then(() => dispatch(getBasketUser(auth._id)))
+        .catch((error) => {
+          console.error(error);
+          alert("Не удалось добавить товар");
+        });
     }
   };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios.js";
@@ -17,22 +17,18 @@ const Headphone = () => {
   const dispatch = useDispatch();
 
   const buyGood = (id, name, imageUrl, price, categoryId, qtyInBasket) => {
-    dispatch(getBasketUser(auth._id));
-    if (basket.length === 0) {
-      return axios.post(`/auth/basket/${auth._id}`, {
-        id,
-        name,
-        imageUrl,
-        price,
-        categoryId,
-        qtyInBasket: qtyInBasket + 1,
-      });
-    }
+    /* if (basketPlus) {
+      dispatch(getBasketUser(auth._id));
+    } */
 
     if (basket.find((el) => el.id == id)) {
-      dispatch(plusQtyBasket({ _id: auth._id, id, qtyInBasket }));
-      if (basketPlus) {
-        return dispatch(getBasketUser(auth._id));
+      if (basket) {
+        dispatch(plusQtyBasket({ _id: auth._id, id, qtyInBasket })).then(() =>
+          dispatch(getBasketUser(auth._id)).catch((error) => {
+            console.error(error);
+            alert("Не удалось добавить товар");
+          })
+        );
       }
     } else {
       dispatch(
@@ -45,10 +41,12 @@ const Headphone = () => {
           categoryId,
           qtyInBasket,
         })
-      );
-      if (buyOneGoodinBasket) {
-        return dispatch(getBasketUser(auth._id));
-      }
+      )
+        .then(() => dispatch(getBasketUser(auth._id)))
+        .catch((error) => {
+          console.error(error);
+          alert("Не удалось добавить товар");
+        });
     }
   };
 
@@ -67,31 +65,35 @@ const Headphone = () => {
                     <img src={el.imageUrl} />
                   </Link>
                   <p>{el.price} рублей</p>
-                  <button
-                    onClick={() =>
-                      buyGood(
-                        el._id,
-                        el.name,
-                        el.imageUrl,
-                        el.price,
-                        el.categoryId,
-                        el.qtyInBasket
-                      )
-                    }
-                    style={
-                      basket
-                        ? {
-                            cursor: "pointer",
-                          }
-                        : {
-                            cursor: "progress",
-                          }
-                    }
-                    disabled={basket ? false : true}
-                    className="buy"
-                  >
-                    Купить
-                  </button>
+                  {auth ? (
+                    <button
+                      onClick={() =>
+                        buyGood(
+                          el._id,
+                          el.name,
+                          el.imageUrl,
+                          el.price,
+                          el.categoryId,
+                          el.qtyInBasket
+                        )
+                      }
+                      style={
+                        basket
+                          ? {
+                              cursor: "pointer",
+                            }
+                          : {
+                              cursor: "progress",
+                            }
+                      }
+                      disabled={basket ? false : true}
+                      className="buy"
+                    >
+                      Купить
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             })

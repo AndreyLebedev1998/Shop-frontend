@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
@@ -11,6 +11,8 @@ import {
   minusQtyBasket,
   deleteGood,
   deleteOneGood,
+  computeTotalQty,
+  deleteAllGood,
 } from "../../store/slices/basket.js";
 import { getAuthMe } from "../../store/slices/authorization";
 import axios from "../../axios.js";
@@ -19,11 +21,35 @@ import style from "./basket.module.css";
 const Basket = () => {
   const auth = useSelector((state) => state.auth.auth.data);
   const basket = useSelector((state) => state.basket.basket.data);
+  const totalQtyGoods = useSelector((state) => state.basket.basket.total);
   const dispatch = useDispatch();
   const authId = JSON.parse(window.localStorage.getItem("auth"));
+  const [apartment, setApartment] = useState();
+
+  /* const city = map[1];
+  const street = map[2];
+  const house = map[3]; */
+
+  let totalQty = 0;
+  let sum = 0;
+  let totalPrice = 0;
 
   useEffect(() => {
-    dispatch(getAuthMe());
+    if (basket) {
+      dispatch(computeTotalQty(totalQty));
+    }
+  }, [basket]);
+
+  /* if (basket) {
+    basket.map((el) => (totalQty += el.qtyInBasket));
+  }
+ */
+  if (basket) {
+    totalPrice = basket.map((el) => (sum += el.price * el.qtyInBasket));
+  }
+
+  useEffect(() => {
+    /* dispatch(getAuthMe()); */
     if (auth) {
       dispatch(getBasketUser(auth._id));
     }
@@ -62,6 +88,7 @@ const Basket = () => {
                   onClick={() => {
                     if (el.qtyInBasket <= 1) {
                       dispatch(deleteGood({ id: el.id }));
+                      dispatch(deleteAllGood());
                       return deleteOneGoodInBasket(el.id);
                     } else {
                       minusQtyGood(el.id, el.qtyInBasket);
@@ -88,6 +115,17 @@ const Basket = () => {
             );
           })
         : ""}
+      {basket && basket.length !== 0 ? (
+        <>
+          <h2>Общее колличество товаров: {totalQtyGoods}</h2>
+          <h2>
+            Общая сумма товаров: {basket ? totalPrice.reverse()[0] : ""} рублей
+          </h2>
+          <Link to="/delivery">Заказать</Link>
+        </>
+      ) : (
+        <h2>Коризна пустая</h2>
+      )}
     </div>
   );
 };
