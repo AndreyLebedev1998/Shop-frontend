@@ -21,6 +21,7 @@ import Basket from "./pages/Basket/Basket";
 import Account from "./pages/Account/Account";
 import Delivery from "./pages/Delivery/Delivery";
 import DeliveryControl from "./pages/DeliveryControl/DeliveryControl";
+import OneDelivery from "./pages/OneDelivery/OneDelivery";
 
 function App() {
   const auth = useSelector((state) => state.auth.auth.data);
@@ -50,6 +51,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/delivery" element={<Delivery />} />
         <Route path="/deliveryControl" element={<DeliveryControl />} />
+        <Route path="/delivery/:id" element={<OneDelivery />} />
       </Routes>
     </div>
   );

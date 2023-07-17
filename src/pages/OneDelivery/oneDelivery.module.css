@@ -1,0 +1,13 @@
+.diliveryUser {
+  display: flex;
+}
+
+table {
+  width: 70%;
+  border: 1px solid black;
+  margin: auto;
+}
+
+td {
+  border: 1px solid black;
+}

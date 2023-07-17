@@ -8,18 +8,29 @@ import {
   SearchControl,
 } from "@pbe/react-yandex-maps";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { getBasketUser } from "../../store/slices/basket";
 import style from "./delivery.module.css";
+import {
+  createDelivery,
+  deleteGoodsInBasket,
+} from "../../store/slices/delivery";
 
 const Delivery = () => {
   const basket = useSelector((state) => state.basket.basket.data);
   const auth = useSelector((state) => state.auth.auth.data);
   const totalQtyGoods = useSelector((state) => state.basket.basket.total);
+  const delivery = useSelector((state) => state.delivery.delivery.data);
+  const emptyBasket = useSelector((state) => state.delivery.emptyBasket.data);
   const [allRight, setAllRight] = useState(false);
   const [map, setMap] = useState([]);
   const [notFound, setNotFound] = useState("");
+  const [apartment, setApartment] = useState("");
   const dispatch = useDispatch();
+
+  const makeAnOrder = (params) => {
+    dispatch(createDelivery(params));
+  };
 
   let sum = 0;
   let totalPrice = 0;
@@ -35,13 +46,18 @@ const Delivery = () => {
     }
   }, []);
 
-  console.log(map);
+  if (emptyBasket) {
+    return <Navigate to="/basket" />;
+  }
+
+  console.log(basket);
+  console.log(totalPrice);
 
   return (
     <div>
       <h1>Доставка</h1>
       {allRight ? (
-        <h1>Проверьте правльность введенных вами данных</h1>
+        <h1>Проверьте правильность введенных вами данных</h1>
       ) : (
         <h2>Введите название города, улицы и номер дома</h2>
       )}
@@ -53,6 +69,12 @@ const Delivery = () => {
             </p>
             <p>Улица: {map[2]}</p>
             <p>Дом: {map[3]}</p>
+            <input
+              type="number"
+              placeholder="Введите номер квартиры"
+              value={apartment}
+              onChange={(e) => setApartment(e.target.value)}
+            />
           </>
         ) : (
           ""
@@ -66,6 +88,11 @@ const Delivery = () => {
             <p>Город: {map[0]}</p>
             <p>Улица: {map[1]}</p>
             <p>Дом: {map[2]}</p>
+            <input
+              type="number"
+              value={apartment}
+              onChange={(e) => setApartment(e.target.value)}
+            />
           </>
         ) : (
           ""
@@ -119,7 +146,7 @@ const Delivery = () => {
       {allRight ? (
         <>
           <div>
-            <h1>Корзина</h1>
+            <h1>Ваш заказ</h1>
             {basket
               ? basket.map((el) => {
                   return (
@@ -150,7 +177,36 @@ const Delivery = () => {
       ) : (
         ""
       )}
-      {allRight ? <button>Заказать</button> : ""}
+      {allRight ? (
+        <button
+          onClick={() => {
+            if (!apartment) {
+              alert("Вы забыли указать номер квартиры");
+            } else {
+              makeAnOrder({
+                id: auth._id,
+                fullName: auth.fullName,
+                lastName: auth.lastName,
+                email: auth.email,
+                adress:
+                  map.length === 4
+                    ? `Город: ${map[0]} ${map[1]}, Улица: ${map[2]}, Дом: ${map[3]}, Квартира: ${apartment}`
+                    : `Город: ${map[0]}}, Улица: ${map[1]}, Дом: ${map[2]}, Квартира: ${apartment}`,
+                telephone: auth.telephone,
+                delivery: basket,
+                totalPrice: totalPrice[0],
+                totalQty: totalQtyGoods,
+                status: "В обработке",
+              });
+              dispatch(deleteGoodsInBasket(auth._id));
+            }
+          }}
+        >
+          Заказать
+        </button>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

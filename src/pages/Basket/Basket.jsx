@@ -24,7 +24,6 @@ const Basket = () => {
   const totalQtyGoods = useSelector((state) => state.basket.basket.total);
   const dispatch = useDispatch();
   const authId = JSON.parse(window.localStorage.getItem("auth"));
-  const [apartment, setApartment] = useState();
 
   /* const city = map[1];
   const street = map[2];
