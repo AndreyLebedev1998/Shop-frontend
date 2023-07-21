@@ -11,8 +11,6 @@ import {
 const Keyboard = () => {
   const products = useSelector((state) => state.product.good.data);
   const basket = useSelector((state) => state.basket.basket.data);
-  const basketPlus = useSelector((state) => state.basket.basketPlus.data);
-  const buyOneGoodinBasket = useSelector((state) => state.basket.buyGood.data);
   const auth = useSelector((state) => state.auth.auth.data);
   const dispatch = useDispatch();
 

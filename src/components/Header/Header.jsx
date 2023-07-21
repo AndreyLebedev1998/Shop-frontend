@@ -5,6 +5,7 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import style from "./header.module.css";
 import { getAuthMe, loginOut } from "../../store/slices/authorization";
 import { computeTotalQty, getBasketUser } from "../../store/slices/basket";
+import { getDeliveryUser } from "../../store/slices/delivery";
 
 const goods = [
   { name: "Главная", element: "/" },
@@ -20,6 +21,10 @@ const Header = () => {
   const basket = useSelector((state) => state.basket.basket.data);
   const totalQtyGoods = useSelector((state) => state.basket.basket.total);
   const dispatch = useDispatch();
+  const deliveryUser = useSelector(
+    (state) => state.delivery.deliveryUserId.data
+  );
+
   const [account, setAccount] = useState(false);
 
   let totalQty = 0;
@@ -28,6 +33,7 @@ const Header = () => {
     dispatch(getAuthMe());
     if (auth) {
       dispatch(getBasketUser(auth._id));
+      dispatch(getDeliveryUser(auth._id));
     }
   }, []);
 
@@ -69,7 +75,15 @@ const Header = () => {
                       <Link to="/account">Аккаунт</Link>
                     </li>
                     <li>
-                      <Link to="/basket">Корзина {totalQtyGoods}</Link>
+                      <Link to="/basket">
+                        Корзина{" "}
+                        {basket && basket.length === 0 ? 0 : totalQtyGoods}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/deliveryUser">
+                        Доставки {deliveryUser ? deliveryUser.length : ""}
+                      </Link>
                     </li>
                     {auth && auth.admin ? (
                       <li>

@@ -9,7 +9,7 @@ import {
 } from "../store/slices/basket.js";
 
 const Home = () => {
-  const products = useSelector((state) => state.product.good.data);
+  const products = JSON.parse(window.localStorage.getItem("products"));
   const basket = useSelector((state) => state.basket.basket.data);
   const basketPlus = useSelector((state) => state.basket.basketPlus.data);
   const buyOneGoodinBasket = useSelector((state) => state.basket.buyGood.data);
@@ -46,63 +46,51 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    if (auth) {
-      setTimeout(() => {
-        dispatch(getBasketUser(auth._id));
-        console.log(123);
-      }, 5000);
-    }
-  }, []);
-
   return (
     <>
       <h1>Посмотрите наши лучшие предложения!</h1>
       <div className="allProduct">
         {products ? (
-          products
-            .map((el) => {
-              return (
-                <div className="product">
-                  <h1>{el.name}</h1>
-                  <Link to={`/goods/${el._id}`}>
-                    <img src={el.imageUrl} />
-                  </Link>
-                  <p>{el.price} рублей</p>
-                  {auth ? (
-                    <button
-                      onClick={() =>
-                        buyGood(
-                          el._id,
-                          el.name,
-                          el.imageUrl,
-                          el.price,
-                          el.categoryId,
-                          el.qtyInBasket
-                        )
-                      }
-                      style={
-                        basket
-                          ? {
-                              cursor: "pointer",
-                            }
-                          : {
-                              cursor: "progress",
-                            }
-                      }
-                      disabled={basket ? false : true}
-                      className="buy"
-                    >
-                      Купить
-                    </button>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              );
-            })
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 4)
+          products.map((el) => {
+            return (
+              <div className="product">
+                <h1>{el.name}</h1>
+                <Link to={`/goods/${el._id}`}>
+                  <img src={el.imageUrl} />
+                </Link>
+                <p>{el.price} рублей</p>
+                {auth ? (
+                  <button
+                    onClick={() =>
+                      buyGood(
+                        el._id,
+                        el.name,
+                        el.imageUrl,
+                        el.price,
+                        el.categoryId,
+                        el.qtyInBasket
+                      )
+                    }
+                    style={
+                      basket
+                        ? {
+                            cursor: "pointer",
+                          }
+                        : {
+                            cursor: "progress",
+                          }
+                    }
+                    disabled={basket ? false : true}
+                    className="buy"
+                  >
+                    Купить
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
+            );
+          })
         ) : (
           <h1>Секундочку...</h1>
         )}

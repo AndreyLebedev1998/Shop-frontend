@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "../../axios.js";
 import {
   getBasketUser,
   buyOneGood,
@@ -17,10 +16,6 @@ const Headphone = () => {
   const dispatch = useDispatch();
 
   const buyGood = (id, name, imageUrl, price, categoryId, qtyInBasket) => {
-    /* if (basketPlus) {
-      dispatch(getBasketUser(auth._id));
-    } */
-
     if (basket.find((el) => el.id == id)) {
       if (basket) {
         dispatch(plusQtyBasket({ _id: auth._id, id, qtyInBasket })).then(() =>

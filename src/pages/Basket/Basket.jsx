@@ -22,6 +22,7 @@ const Basket = () => {
   const auth = useSelector((state) => state.auth.auth.data);
   const basket = useSelector((state) => state.basket.basket.data);
   const totalQtyGoods = useSelector((state) => state.basket.basket.total);
+  const emptyBasket = useSelector((state) => state.delivery.emptyBasket.data);
   const dispatch = useDispatch();
   const authId = JSON.parse(window.localStorage.getItem("auth"));
 
@@ -58,8 +59,8 @@ const Basket = () => {
     dispatch(minusQtyBasket({ _id: auth._id, id, qtyInBasket }));
   };
 
-  const deleteOneGoodInBasket = (id) => {
-    dispatch(deleteOneGood({ _id: auth._id, id }));
+  const deleteOneGoodInBasket = (id, qtyInBasket) => {
+    dispatch(deleteOneGood({ _id: auth._id, id, qtyInBasket }));
   };
 
   const plusQtyGood = (id, qtyInBasket) => {
@@ -106,7 +107,7 @@ const Basket = () => {
                 <MdDeleteForever
                   onClick={() => {
                     dispatch(deleteGood({ id: el.id }));
-                    deleteOneGoodInBasket(el.id);
+                    deleteOneGoodInBasket(el.id, el.qtyInBasket);
                   }}
                   className={style.delete}
                 />

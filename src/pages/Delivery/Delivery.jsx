@@ -9,28 +9,24 @@ import {
 } from "@pbe/react-yandex-maps";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
+import { getAuthMe } from "../../store/slices/authorization";
 import { getBasketUser } from "../../store/slices/basket";
 import style from "./delivery.module.css";
 import {
-  createDelivery,
   deleteGoodsInBasket,
+  addDeliveryInUser,
 } from "../../store/slices/delivery";
 
 const Delivery = () => {
   const basket = useSelector((state) => state.basket.basket.data);
   const auth = useSelector((state) => state.auth.auth.data);
   const totalQtyGoods = useSelector((state) => state.basket.basket.total);
-  const delivery = useSelector((state) => state.delivery.delivery.data);
-  const emptyBasket = useSelector((state) => state.delivery.emptyBasket.data);
+  const authId = JSON.parse(window.localStorage.getItem("auth"));
   const [allRight, setAllRight] = useState(false);
   const [map, setMap] = useState([]);
   const [notFound, setNotFound] = useState("");
   const [apartment, setApartment] = useState("");
   const dispatch = useDispatch();
-
-  const makeAnOrder = (params) => {
-    dispatch(createDelivery(params));
-  };
 
   let sum = 0;
   let totalPrice = 0;
@@ -39,23 +35,48 @@ const Delivery = () => {
     totalPrice = basket.map((el) => (sum += el.price * el.qtyInBasket));
   }
 
+  const addDelivery = () => {
+    dispatch(
+      addDeliveryInUser({
+        _id: auth._id,
+        id: Math.floor(Math.random() * 100000) + 1,
+        fullName: auth.fullName,
+        lastName: auth.lastName,
+        email: auth.email,
+        adress:
+          map.length === 4
+            ? `Город: ${map[0]} ${map[1]}, Улица: ${map[2]}, Дом: ${map[3]}, Квартира: ${apartment}`
+            : `Город: ${map[0]}}, Улица: ${map[1]}, Дом: ${map[2]}, Квартира: ${apartment}`,
+        telephone: auth.telephone,
+        delivery: basket,
+        totalPrice: totalPrice[0],
+        totalQty: totalQtyGoods,
+        status: "В обработке",
+      })
+    );
+  };
+
   useEffect(() => {
-    /* dispatch(getAuthMe()); */
+    dispatch(getAuthMe());
     if (auth) {
       dispatch(getBasketUser(auth._id));
     }
   }, []);
 
-  if (emptyBasket) {
-    return <Navigate to="/basket" />;
+  if (!authId) {
+    return <Navigate to="/" />;
   }
 
-  console.log(basket);
-  console.log(totalPrice);
+  if (basket) {
+    if (basket.length === 0) {
+      return <Navigate to="/basket" />;
+    }
+  }
 
   return (
     <div>
       <h1>Доставка</h1>
+      Свердловская область, Новоуральск, Автозаводская улица, 21
       {allRight ? (
         <h1>Проверьте правильность введенных вами данных</h1>
       ) : (
@@ -178,32 +199,21 @@ const Delivery = () => {
         ""
       )}
       {allRight ? (
-        <button
+        <Link
+          to="/deliveryUser"
           onClick={() => {
             if (!apartment) {
               alert("Вы забыли указать номер квартиры");
             } else {
-              makeAnOrder({
-                id: auth._id,
-                fullName: auth.fullName,
-                lastName: auth.lastName,
-                email: auth.email,
-                adress:
-                  map.length === 4
-                    ? `Город: ${map[0]} ${map[1]}, Улица: ${map[2]}, Дом: ${map[3]}, Квартира: ${apartment}`
-                    : `Город: ${map[0]}}, Улица: ${map[1]}, Дом: ${map[2]}, Квартира: ${apartment}`,
-                telephone: auth.telephone,
-                delivery: basket,
-                totalPrice: totalPrice[0],
-                totalQty: totalQtyGoods,
-                status: "В обработке",
-              });
-              dispatch(deleteGoodsInBasket(auth._id));
+              addDelivery();
+              dispatch(deleteGoodsInBasket(auth._id)).then(() =>
+                dispatch(getBasketUser(auth._id))
+              );
             }
           }}
         >
           Заказать
-        </button>
+        </Link>
       ) : (
         ""
       )}

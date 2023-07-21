@@ -17,7 +17,6 @@ const Account = () => {
   const auth = useSelector((state) => state.auth.auth.data);
   const fullName = useSelector((state) => state.auth.fullName.text);
   const lastName = useSelector((state) => state.auth.lastName.text);
-  const adress = useSelector((state) => state.auth.adress.text);
   const telephone = useSelector((state) => state.auth.telephone.text);
   const updateUserState = useSelector((state) => state.auth.updateUser.data);
   const deleteUserState = useSelector((state) => state.auth.deleteUser.data);
@@ -25,12 +24,6 @@ const Account = () => {
   const [gender, setGender] = useState(0);
   const [man, setMan] = useState("");
   const [women, setWomen] = useState("");
-  /*  const man = "Мужчина";
-  const women = "Женщина"; */
-
-  useEffect(() => {
-    dispatch(getAuthMe());
-  }, []);
 
   const chacngeUserData = (params) => {
     dispatch(updateUser(params));
@@ -103,12 +96,6 @@ const Account = () => {
           <label>Ж</label>
         </div>
         <input
-          type="text"
-          placeholder="Адрес постоянной доставки"
-          value={adress}
-          onChange={(e) => dispatch(changeAdress(e.target.value))}
-        />
-        <input
           type="tel"
           placeholder="Введите ваш номер телефона"
           value={telephone}
@@ -121,7 +108,6 @@ const Account = () => {
               fullName,
               lastName,
               gender: man ? man : women,
-              adress,
               telephone,
             })
           }

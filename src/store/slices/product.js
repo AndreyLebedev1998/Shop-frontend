@@ -3,6 +3,10 @@ import axios from "../../axios";
 
 export const fetchGetAllGoods = createAsyncThunk("/goods", async () => {
   const { data } = await axios.get("/goods");
+  window.localStorage.setItem(
+    "products",
+    JSON.stringify(data.sort(() => 0.5 - Math.random()).slice(0, 3))
+  );
   return data;
 });
 

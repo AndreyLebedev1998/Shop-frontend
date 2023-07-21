@@ -3,17 +3,30 @@ import axios from "../../axios.js";
 
 export const authorization = createAsyncThunk("auth", async (params) => {
   const { data } = await axios.post("/auth/login", params);
+  if (data) {
+    window.localStorage.setItem("auth", JSON.stringify(data._id));
+  }
+  if (data.admin) {
+    window.localStorage.setItem("admin", data.admin);
+  }
   return data;
 });
 
 export const getAuthMe = createAsyncThunk("getAuthMe", async () => {
   const { data } = await axios.get("/auth/me");
   window.localStorage.setItem("auth", JSON.stringify(data._id));
+  if (data.admin) {
+    window.localStorage.setItem("admin", data.admin);
+  }
   return data;
 });
 
 export const register = createAsyncThunk("register", async (params) => {
   const { data } = await axios.post("/auth/register", params);
+  if (data) {
+    window.localStorage.setItem("auth", JSON.stringify(data._id));
+  }
+
   return data;
 });
 
@@ -22,7 +35,6 @@ export const updateUser = createAsyncThunk("updateUser", async (params) => {
     fullName: params.fullName,
     lastName: params.lastName,
     gender: params.gender,
-    adress: params.adress,
     telephone: params.telephone,
   });
 
@@ -46,9 +58,6 @@ const initialState = {
   lastName: {
     text: "",
   },
-  adress: {
-    text: "",
-  },
   telephone: {
     text: "",
   },
@@ -69,15 +78,14 @@ const authSlice = createSlice({
     loginOut: (state) => {
       state.auth.data = null;
       window.localStorage.removeItem("token");
+      window.localStorage.removeItem("auth");
+      window.localStorage.removeItem("admin");
     },
     changeFullName: (state, action) => {
       state.fullName.text = action.payload;
     },
     changeLastName: (state, action) => {
       state.lastName.text = action.payload;
-    },
-    changeAdress: (state, action) => {
-      state.adress.text = action.payload;
     },
     changeTelephone: (state, action) => {
       state.telephone.text = action.payload;
@@ -104,7 +112,6 @@ const authSlice = createSlice({
       state.auth.data = action.payload;
       state.fullName.text = action.payload.fullName;
       state.lastName.text = action.payload.lastName;
-      state.adress.text = action.payload.adress;
       state.telephone.text = action.payload.telephone;
       state.auth.status = "loaded";
     },

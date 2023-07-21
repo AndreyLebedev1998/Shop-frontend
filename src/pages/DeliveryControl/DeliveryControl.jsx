@@ -1,53 +1,80 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllDelivery } from "../../store/slices/delivery";
+import { Link, Navigate } from "react-router-dom";
+import { MdDeleteForever } from "react-icons/md";
+import {
+  deleteOneDelivery,
+  getAllDeliveryUsers,
+} from "../../store/slices/delivery";
 import style from "./deliveryControl.module.css";
-import { Link } from "react-router-dom";
 
 const DeliveryControl = () => {
   const dispatch = useDispatch();
-  const allDelivery = useSelector((state) => state.delivery.allDelivery.data);
+  const allDeliveryUsers = useSelector(
+    (state) => state.delivery.allDeliveryUsers.data
+  );
+  const auth = useSelector((state) => state.auth.auth.data);
+  const admin = window.localStorage.getItem("admin");
 
   useEffect(() => {
-    dispatch(getAllDelivery());
+    dispatch(getAllDeliveryUsers());
   }, []);
+
+  const deleteDelivery = (params) => {
+    dispatch(deleteOneDelivery(params)).then(() =>
+      dispatch(getAllDeliveryUsers())
+    );
+  };
+
+  if (!admin) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div>
       <h1>Заказы</h1>
-      {allDelivery
-        ? allDelivery.map((el) => {
-            return (
-              <Link to={`/delivery/${el._id}`}>
+      {allDeliveryUsers
+        ? allDeliveryUsers.map((el) => {
+            return el.map((dev) => {
+              return (
                 <div className={style.delivery}>
-                  <h2>Номер заказа: {el._id}</h2>
-                  <h3>
-                    Имя: {el.fullName} Фамилия: {el.lastName ? el.lastName : ""}
-                  </h3>
+                  <Link to={`/delivery/${dev.id}/${dev.authId}`}>
+                    <h3>Номер заказа: {dev.id}</h3>
+                    <h3>
+                      Имя: {dev.fullName} Фамилия:{" "}
+                      {dev.lastName ? dev.lastName : ""}
+                    </h3>
+                  </Link>
                   <p
                     style={
-                      el.status === "В обработке"
+                      dev.status === "В обработке"
                         ? {
                             color: "red",
                           }
-                        : el.status === "Оформлен"
+                        : dev.status === "Оформлен"
                         ? {
                             color: "black",
                           }
-                        : el.status === "Выполнен"
+                        : dev.status === "Выполнен"
                         ? {
                             color: "green",
                           }
                         : { color: "black" }
                     }
                   >
-                    {el.status}
+                    {dev.status}
                   </p>
-                  <p>Общая сумма: {el.totalPrice}</p>
-                  <p>Общее колличество: {el.totalQty}</p>
+                  <p>Общая сумма: {dev.totalPrice}</p>
+                  <p>Общее колличество: {dev.totalQty}</p>
+                  <MdDeleteForever
+                    onClick={() =>
+                      deleteDelivery({ authId: dev.authId, id: dev.id })
+                    }
+                    className={style.deleteDelivery}
+                  />
                 </div>
-              </Link>
-            );
+              );
+            });
           })
         : ""}
     </div>
