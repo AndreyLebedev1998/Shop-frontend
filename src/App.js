@@ -2,6 +2,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { BsBasketFill } from "react-icons/bs";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Keyboard from "./pages/keyboards/Keyboard";
 import Headphone from "./pages/headphones/Headphone";
@@ -11,7 +12,11 @@ import Mouse from "./pages/mouses/Mouse";
 import Home from "./pages/Home";
 import Header from "./components/Header/Header";
 import axios from "./axios";
-import { fetchGetAllGoods, getBasketUser } from "./store/slices/product";
+import {
+  fetchGetAllGoods,
+  getBasketUser,
+  getTheBestGoods,
+} from "./store/slices/product";
 import OneGood from "./pages/oneGood/OneGood";
 import Footer from "./components/Footer/Footer";
 import Entry from "./pages/Entry/Entry";
@@ -32,6 +37,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchGetAllGoods());
+    dispatch(getTheBestGoods());
     dispatch(getAuthMe());
     dispatch(getBasketUser(authId));
   }, []);
@@ -59,6 +65,7 @@ function App() {
           path="/deliveryOneUser/:id/:authId"
           element={<DeliveryOneUser />}
         />
+        <Route path="/test" element={<Footer />} />
       </Routes>
     </div>
   );

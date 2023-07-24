@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from "../../axios.js";
+import { Button, Container, Row, Col } from "react-bootstrap";
 import {
   getBasketUser,
   buyOneGood,
@@ -47,54 +47,66 @@ const Keyboard = () => {
   return (
     <>
       <h1>Клавиатуры</h1>
-      <div className="allProduct">
-        {products ? (
-          products
-            .filter((el) => el.categoryId === 1)
-            .map((el) => {
-              return (
-                <div className="product">
-                  <h1>{el.name}</h1>
-                  <Link to={`/goods/${el._id}`}>
-                    <img src={el.imageUrl} />
-                  </Link>
-                  <p>{el.price} рублей</p>
-                  {auth ? (
-                    <button
-                      onClick={() =>
-                        buyGood(
-                          el._id,
-                          el.name,
-                          el.imageUrl,
-                          el.price,
-                          el.categoryId,
-                          el.qtyInBasket
-                        )
-                      }
-                      style={
-                        basket
-                          ? {
-                              cursor: "pointer",
-                            }
-                          : {
-                              cursor: "progress",
-                            }
-                      }
-                      disabled={basket ? false : true}
-                      className="buy"
-                    >
-                      Купить
-                    </button>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              );
-            })
-        ) : (
-          <h1>Секундочку...</h1>
-        )}
-      </div>
+      <Container>
+        <Row>
+          {products ? (
+            products
+              .filter((el) => el.categoryId === 1)
+              .map((el) => {
+                return (
+                  <Col
+                    xl={4}
+                    md={4}
+                    cm={6}
+                    xs={6}
+                    style={{
+                      marginTop: "20px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <h3>{el.name}</h3>
+                    <Link to={`/goods/${el._id}`}>
+                      <img src={el.imageUrl} />
+                    </Link>
+                    <p>{el.price} рублей</p>
+                    {auth ? (
+                      <Button
+                        variant="success"
+                        onClick={() =>
+                          buyGood(
+                            el._id,
+                            el.name,
+                            el.imageUrl,
+                            el.price,
+                            el.categoryId,
+                            el.qtyInBasket
+                          )
+                        }
+                        style={
+                          basket
+                            ? {
+                                cursor: "pointer",
+                              }
+                            : {
+                                cursor: "progress",
+                              }
+                        }
+                        disabled={basket ? false : true}
+                        className="btn btn-success btn-lg"
+                      >
+                        Купить
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </Col>
+                );
+              })
+          ) : (
+            <h1>Секундочку...</h1>
+          )}
+        </Row>
+      </Container>
     </>
   );
 };

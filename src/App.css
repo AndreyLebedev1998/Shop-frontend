@@ -9,28 +9,32 @@ a {
 
 .active {
   color: rgb(255, 255, 255);
-  background-color: rgb(50, 107, 232);
+  background-color: rgb(61, 194, 59);
   border-radius: 10px;
 }
 
-.allProduct {
-  margin-left: 7%;
-  width: 90%;
-}
+/* .container {
+  margin: auto;
+  width: 100%;
+} */
 
-.product {
-  display: inline;
-  float: left;
+/* .product {
   margin-left: 30px;
-}
+} */
 
 img {
-  width: 400px;
-  height: 250px;
+  width: 160px;
+  height: 140px;
   cursor: pointer;
 }
 
-.buy {
+table {
+  width: 70% !important;
+  border: 1px solid black;
+  margin: auto;
+}
+
+/* .buy {
   font-size: 1.7rem;
   width: 40%;
   height: 50px;
@@ -38,7 +42,7 @@ img {
   border: 1px solid rgb(132, 132, 131);
   background-color: rgb(24, 169, 34);
   cursor: pointer;
-}
+} */
 
 /* .buy:active {
   color: white;
@@ -54,4 +58,9 @@ img {
   font-size: 1.5rem;
   margin-left: 97%;
   margin-top: 4%;
+}
+
+.dropdown {
+  width: 15%;
+  float: right;
 }

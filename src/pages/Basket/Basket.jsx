@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { MdDeleteForever } from "react-icons/md";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import {
   getBasketUser,
   plusQtyBasket,
@@ -15,7 +16,6 @@ import {
   deleteAllGood,
 } from "../../store/slices/basket.js";
 import { getAuthMe } from "../../store/slices/authorization";
-import axios from "../../axios.js";
 import style from "./basket.module.css";
 
 const Basket = () => {
@@ -72,61 +72,82 @@ const Basket = () => {
   }
 
   return (
-    <div>
-      <h1>Корзина</h1>
-      {basket
-        ? basket.map((el) => {
-            return (
-              <div className="product">
-                <h1>{el.name}</h1>
-                <Link to={`/goods/${el._id}`}>
-                  <img src={el.imageUrl} />
-                </Link>
-                <p>{el.price} рублей</p>
-                <p>Колличество: {el.qtyInBasket}</p>
-                <AiOutlineMinusCircle
-                  onClick={() => {
-                    if (el.qtyInBasket <= 1) {
+    <Container>
+      <Row>
+        <h1>Корзина</h1>
+        {basket
+          ? basket.map((el) => {
+              return (
+                <Col xs={6} cm={6} md={4} lg={3} xl={3} xxl={3}>
+                  <h3>{el.name}</h3>
+                  <Link to={`/goods/${el.id}`}>
+                    <img src={el.imageUrl} />
+                  </Link>
+                  <p>{el.price} рублей</p>
+                  <p>Колличество: {el.qtyInBasket}</p>
+                  <AiOutlineMinusCircle
+                    onClick={() => {
+                      if (el.qtyInBasket <= 1) {
+                        dispatch(deleteGood({ id: el.id }));
+                        dispatch(deleteAllGood());
+                        return deleteOneGoodInBasket(el.id);
+                      } else {
+                        minusQtyGood(el.id, el.qtyInBasket);
+                        return dispatch(countMinus({ id: el.id }));
+                      }
+                    }}
+                    className={style.minus}
+                  />
+                  <AiOutlinePlusCircle
+                    className={style.plus}
+                    onClick={() => {
+                      dispatch(countPlus({ id: el.id }));
+                      plusQtyGood(el.id, el.qtyInBasket);
+                    }}
+                  />
+                  <MdDeleteForever
+                    onClick={() => {
                       dispatch(deleteGood({ id: el.id }));
-                      dispatch(deleteAllGood());
-                      return deleteOneGoodInBasket(el.id);
-                    } else {
-                      minusQtyGood(el.id, el.qtyInBasket);
-                      return dispatch(countMinus({ id: el.id }));
-                    }
-                  }}
-                  className={style.minus}
-                />
-                <AiOutlinePlusCircle
-                  className={style.plus}
-                  onClick={() => {
-                    dispatch(countPlus({ id: el.id }));
-                    plusQtyGood(el.id, el.qtyInBasket);
-                  }}
-                />
-                <MdDeleteForever
-                  onClick={() => {
-                    dispatch(deleteGood({ id: el.id }));
-                    deleteOneGoodInBasket(el.id, el.qtyInBasket);
-                  }}
-                  className={style.delete}
-                />
-              </div>
-            );
-          })
-        : ""}
-      {basket && basket.length !== 0 ? (
-        <>
-          <h2>Общее колличество товаров: {totalQtyGoods}</h2>
-          <h2>
-            Общая сумма товаров: {basket ? totalPrice.reverse()[0] : ""} рублей
-          </h2>
-          <Link to="/delivery">Заказать</Link>
-        </>
-      ) : (
-        <h2>Коризна пустая</h2>
-      )}
-    </div>
+                      deleteOneGoodInBasket(el.id, el.qtyInBasket);
+                    }}
+                    className={style.delete}
+                  />
+                </Col>
+              );
+            })
+          : ""}
+      </Row>
+      <Row
+        style={{
+          marginTop: "30px",
+        }}
+      >
+        {basket && basket.length !== 0 ? (
+          <>
+            <h4>Общее колличество товаров: {totalQtyGoods}</h4>
+            <h4>
+              Общая сумма товаров: {basket ? totalPrice.reverse()[0] : ""}{" "}
+              рублей
+            </h4>
+            <Link
+              to="/delivery"
+              style={{
+                marginTop: "20px",
+              }}
+            >
+              <Button variant="success">Заказать</Button>
+            </Link>
+          </>
+        ) : (
+          <h2>Коризна пустая</h2>
+        )}
+      </Row>
+      <Row
+        style={{
+          margin: "40px",
+        }}
+      ></Row>
+    </Container>
   );
 };
 

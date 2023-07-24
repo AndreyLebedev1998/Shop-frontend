@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import style from "./deliveryUser.module.css";
 import {
   getDeliveryUser,
@@ -33,53 +34,131 @@ const DeliveryUser = () => {
   }
 
   return (
-    <div className={style.allDelivery}>
-      <h1>Ваши доставки</h1>
-      {deliveryUser
-        ? deliveryUser.map((dev) => {
-            return (
-              <div className={style.delivery}>
-                <Link to={`/deliveryOneUser/${dev.id}/${dev.authId}`}>
-                  <h3>Номер заказа: {dev.id}</h3>
-                  <h3>
-                    Имя: {dev.fullName} Фамилия:{" "}
-                    {dev.lastName ? dev.lastName : ""}
-                  </h3>
-                </Link>
-                <p
-                  style={
-                    dev.status === "В обработке"
-                      ? {
-                          color: "red",
-                        }
-                      : dev.status === "Оформлен"
-                      ? {
-                          color: "black",
-                        }
-                      : dev.status === "Выполнен"
-                      ? {
-                          color: "green",
-                        }
-                      : { color: "black" }
-                  }
+    <>
+      <h1
+        style={{
+          marginTop: "20px",
+        }}
+      >
+        Ваши доставки
+      </h1>
+      <Container>
+        {deliveryUser
+          ? deliveryUser.map((dev) => {
+              return (
+                <Row
+                  style={{
+                    margin: "auto",
+                    marginTop: "30px",
+                    border: "1px solid black",
+                    width: "90%",
+                  }}
                 >
-                  {dev.status}
-                </p>
-                <p>Общая сумма: {dev.totalPrice}</p>
-                <p>Общее колличество: {dev.totalQty}</p>
-                <button
-                  onClick={() =>
-                    deleteDelivery({ authId: dev.authId, id: dev.id })
-                  }
-                  className={style.deleteDelivery}
-                >
-                  Отменить
-                </button>
-              </div>
-            );
-          })
-        : ""}
-    </div>
+                  <Row>
+                    <Col
+                      lg={6}
+                      xs={10}
+                      style={{
+                        margin: "auto",
+                      }}
+                    >
+                      <Link to={`/deliveryOneUser/${dev.id}/${dev.authId}`}>
+                        <h4
+                          style={{
+                            marginTop: "20px",
+                          }}
+                        >
+                          Номер заказа: {dev.id}
+                        </h4>
+
+                        <h4>
+                          Имя: {dev.fullName} Фамилия:{" "}
+                          {dev.lastName ? dev.lastName : ""}
+                        </h4>
+                      </Link>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col
+                      lg={4}
+                      xs={6}
+                      style={{
+                        margin: "auto",
+                      }}
+                    >
+                      <p>Общая сумма: {dev.totalPrice}</p>
+                    </Col>
+                    <Col
+                      lg={4}
+                      xs={6}
+                      style={{
+                        margin: "auto",
+                      }}
+                    >
+                      <p>Общее колличество: {dev.totalQty}</p>
+                    </Col>
+                    <Col
+                      lg={4}
+                      xs={12}
+                      style={{
+                        margin: "auto",
+                      }}
+                    >
+                      <p
+                        style={
+                          dev.status === "В обработке"
+                            ? {
+                                color: "red",
+                              }
+                            : dev.status === "Оформлен"
+                            ? {
+                                color: "black",
+                              }
+                            : dev.status === "Выполнен"
+                            ? {
+                                color: "green",
+                              }
+                            : { color: "black" }
+                        }
+                      >
+                        {dev.status}
+                      </p>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col
+                      lg={2}
+                      xs={12}
+                      style={{
+                        margin: "auto",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      {dev.status === "Выполнен" ? (
+                        ""
+                      ) : (
+                        <Button
+                          variant="danger"
+                          onClick={() =>
+                            deleteDelivery({ authId: dev.authId, id: dev.id })
+                          }
+                        >
+                          Отменить
+                        </Button>
+                      )}
+                    </Col>
+                  </Row>
+                </Row>
+              );
+            })
+          : ""}
+        <Row
+          style={{
+            marginTop: "30px",
+          }}
+        ></Row>
+      </Container>
+    </>
   );
 };
 

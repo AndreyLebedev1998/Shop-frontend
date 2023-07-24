@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useEffect } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { getOneDelivery } from "../../store/slices/delivery";
 import style from "./deliveryOneUser.module.css";
 
@@ -31,64 +32,94 @@ const DeliveryOneUser = () => {
   }
 
   return (
-    <div>
-      <h1>Заказ №{id}</h1>
-      {oneDelivery
-        ? oneDelivery.delivery.map((dev) => {
-            return (
-              <div className={style.delivery}>
-                <h3>
-                  Имя: {dev.fullName} Фамилия:{" "}
-                  {dev.lastName ? dev.lastName : ""}
-                </h3>
-                <p
-                  style={
-                    dev.status === "В обработке"
-                      ? {
-                          color: "red",
+    <>
+      <h1
+        style={{
+          margin: "20px",
+        }}
+      >
+        Заказ №{id}
+      </h1>
+      <Container>
+        {oneDelivery
+          ? oneDelivery.delivery.map((dev) => {
+              return (
+                <>
+                  <Row>
+                    <Col>
+                      <h3>
+                        Имя: {dev.fullName} Фамилия:{" "}
+                        {dev.lastName ? dev.lastName : ""}
+                      </h3>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <p
+                        style={
+                          dev.status === "В обработке"
+                            ? {
+                                color: "red",
+                              }
+                            : dev.status === "Оформлен"
+                            ? {
+                                color: "black",
+                              }
+                            : dev.status === "Выполнен"
+                            ? {
+                                color: "green",
+                              }
+                            : { color: "black" }
                         }
-                      : dev.status === "Оформлен"
-                      ? {
-                          color: "black",
-                        }
-                      : dev.status === "Выполнен"
-                      ? {
-                          color: "green",
-                        }
-                      : { color: "black" }
-                  }
-                >
-                  <strong>{dev.status}</strong>
-                </p>
-                <p>Общая сумма: {dev.totalPrice}</p>
-                <p>Общее колличество: {dev.totalQty}</p>
-                <p>Адрес доставки: {dev.adress}</p>
-                <table>
-                  <tbody>
-                    <tr>
-                      <th>Наименование</th>
-                      <th>Цена</th>
-                      <th>Колличество</th>
-                    </tr>
-                    {dev.delivery.map((el) => {
-                      return (
-                        <>
-                          <tr>
-                            <td>{el.name}</td>
-                            <td>{el.price}</td>
-                            <td>{el.qtyInBasket}</td>
-                          </tr>
-                        </>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            );
-          })
-        : ""}
-      <button onClick={goBack}>Назад</button>
-    </div>
+                      >
+                        <strong>{dev.status}</strong>
+                      </p>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <p>Общая сумма: {dev.totalPrice}</p>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <p>Общее колличество: {dev.totalQty}</p>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <p>Адрес доставки: {dev.adress}</p>
+                    </Col>
+                  </Row>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th>Наименование</th>
+                        <th>Цена</th>
+                        <th>Колличество</th>
+                      </tr>
+                      {dev.delivery.map((el) => {
+                        return (
+                          <>
+                            <tr>
+                              <td>{el.name}</td>
+                              <td>{el.price}</td>
+                              <td>{el.qtyInBasket}</td>
+                            </tr>
+                          </>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </>
+              );
+            })
+          : ""}
+        <Button style={{ margin: "30px" }} variant="secondary" onClick={goBack}>
+          Назад
+        </Button>
+      </Container>
+    </>
   );
 };
 

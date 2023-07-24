@@ -7,6 +7,16 @@ import {
   Placemark,
   SearchControl,
 } from "@pbe/react-yandex-maps";
+import { MdOutlineApartment } from "react-icons/md";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Form,
+  InputGroup,
+  Alert,
+} from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { getAuthMe } from "../../store/slices/authorization";
@@ -26,6 +36,7 @@ const Delivery = () => {
   const [map, setMap] = useState([]);
   const [notFound, setNotFound] = useState("");
   const [apartment, setApartment] = useState("");
+  const [warning, setWarning] = useState(false);
   const dispatch = useDispatch();
 
   let sum = 0;
@@ -34,6 +45,8 @@ const Delivery = () => {
   if (basket) {
     totalPrice = basket.map((el) => (sum += el.price * el.qtyInBasket));
   }
+
+  console.log(map);
 
   const addDelivery = () => {
     dispatch(
@@ -74,28 +87,63 @@ const Delivery = () => {
   }
 
   return (
-    <div>
+    <Container>
       <h1>Доставка</h1>
       Свердловская область, Новоуральск, Автозаводская улица, 21
       {allRight ? (
-        <h1>Проверьте правильность введенных вами данных</h1>
+        <h3>Проверьте правильность введенных вами данных</h3>
       ) : (
-        <h2>Введите название города, улицы и номер дома</h2>
+        <h3>Введите название города, улицы и номер дома через запятую</h3>
       )}
       {allRight ? (
         map.length === 4 ? (
           <>
-            <p>
-              Город: {map[1]}, {map[0]}
-            </p>
-            <p>Улица: {map[2]}</p>
-            <p>Дом: {map[3]}</p>
-            <input
-              type="number"
-              placeholder="Введите номер квартиры"
-              value={apartment}
-              onChange={(e) => setApartment(e.target.value)}
-            />
+            <Row>
+              <Col>
+                <p>
+                  Город: {map[1]}, {map[0]}
+                </p>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <p>Улица: {map[2]}</p>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <p>Дом: {map[3]}</p>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col
+                lg={6}
+                xs={10}
+                xl={6}
+                style={{
+                  margin: "auto",
+                }}
+              >
+                <InputGroup className="mb-3">
+                  <InputGroup.Text id="basic-addon1">
+                    <MdOutlineApartment
+                      style={{
+                        fontSize: "1.4rem",
+                      }}
+                    />
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="number"
+                    placeholder="Введите номер квартиры"
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    value={apartment}
+                    onChange={(e) => setApartment(e.target.value)}
+                  />
+                </InputGroup>
+              </Col>
+            </Row>
           </>
         ) : (
           ""
@@ -122,45 +170,65 @@ const Delivery = () => {
         ""
       )}
       {!allRight ? (
-        <YMaps
-          query={{
-            apikey: "9ff20f06-4c0c-4b03-8c72-64ffd99b5479",
-          }}
-        >
-          <Map
-            className={style.map}
-            defaultState={{
-              center: [57.15, 60.05],
-              zoom: 9,
-              controls: [],
-            }}
-          >
-            <SearchControl
-              options={{
-                fitMaxWidth: true,
+        <Row>
+          <Col xs={12}>
+            <YMaps
+              query={{
+                apikey: "9ff20f06-4c0c-4b03-8c72-64ffd99b5479",
               }}
-              onChange={(e) => {
-                setMap(
-                  e.originalEvent.target.state._data.inputValue
-                    ? e.originalEvent.target.state._data.inputValue.split(",")
-                    : ""
-                );
-                setNotFound(
-                  e.originalEvent.target.state._data.popupHintContent
-                );
-              }}
-            />
-            <FullscreenControl />
-            {/* <Placemark geometry={[57.2399, 60.09]} /> */}
-          </Map>
-        </YMaps>
+            >
+              <Map
+                className={style.map}
+                defaultState={{
+                  center: [57.15, 60.05],
+                  zoom: 9,
+                  controls: [],
+                }}
+              >
+                <SearchControl
+                  options={{
+                    fitMaxWidth: true,
+                  }}
+                  onChange={(e) => {
+                    setMap(
+                      e.originalEvent.target.state._data.inputValue
+                        ? e.originalEvent.target.state._data.inputValue.split(
+                            ","
+                          )
+                        : ""
+                    );
+                    setNotFound(
+                      e.originalEvent.target.state._data.popupHintContent
+                    );
+                  }}
+                />
+                <FullscreenControl />
+                {/* <Placemark geometry={[57.2399, 60.09]} /> */}
+              </Map>
+            </YMaps>
+          </Col>
+        </Row>
       ) : (
         ""
       )}
       {allRight ? (
-        <button onClick={() => setAllRight(!allRight)}>Назад</button>
+        <Row>
+          <Col>
+            <Button variant="secondary" onClick={() => setAllRight(!allRight)}>
+              Назад
+            </Button>
+          </Col>
+        </Row>
       ) : map.length >= 3 ? (
-        <button onClick={() => setAllRight(!allRight)}>Далее</button>
+        <Button
+          style={{
+            margin: "30px",
+          }}
+          variant="success"
+          onClick={() => setAllRight(!allRight)}
+        >
+          Далее
+        </Button>
       ) : (
         ""
       )}
@@ -198,14 +266,24 @@ const Delivery = () => {
       ) : (
         ""
       )}
+      {warning ? (
+        <Row>
+          <Col>
+            <Alert variant="danger">Вы забыли указать номер квартиры</Alert>
+          </Col>
+        </Row>
+      ) : (
+        ""
+      )}
       {allRight ? (
-        <Link
+        <Button
           to="/deliveryUser"
           onClick={() => {
             if (!apartment) {
-              alert("Вы забыли указать номер квартиры");
+              setWarning(true);
             } else {
               addDelivery();
+              setWarning(false);
               dispatch(deleteGoodsInBasket(auth._id)).then(() =>
                 dispatch(getBasketUser(auth._id))
               );
@@ -213,11 +291,11 @@ const Delivery = () => {
           }}
         >
           Заказать
-        </Link>
+        </Button>
       ) : (
         ""
       )}
-    </div>
+    </Container>
   );
 };
 

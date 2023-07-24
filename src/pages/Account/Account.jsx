@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
+import {
+  Col,
+  Container,
+  Form,
+  InputGroup,
+  Row,
+  Button,
+  Alert,
+} from "react-bootstrap";
 import style from "./account.module.css";
 import {
   updateUser,
@@ -24,6 +33,13 @@ const Account = () => {
   const [gender, setGender] = useState(0);
   const [man, setMan] = useState("");
   const [women, setWomen] = useState("");
+  const [removeAccount, setRemoveAccount] = useState(false);
+
+  useEffect(() => {
+    if (auth) {
+      dispatch(getAuthMe(auth._id));
+    }
+  }, []);
 
   const chacngeUserData = (params) => {
     dispatch(updateUser(params));
@@ -45,79 +61,163 @@ const Account = () => {
   };
 
   const deleteUser = () => {
-    if (
-      window.confirm(
-        "Вы действительно хотите удалить свой аккаунт\nОтменить это действие будет невозможно"
-      )
-    ) {
-      dispatch(deleteAccount(auth._id)).then(() => dispatch(loginOut()));
-    }
+    dispatch(deleteAccount(auth._id)).then(() => dispatch(loginOut()));
   };
-
-  /* if (deleteUserState) {
-    window.localStorage.removeItem("token");
-  } */
 
   return (
     <>
-      <h1>Ваши данные</h1>
-      {updateUserState ? <h2>Данные успешно обновлены</h2> : ""}
-      <div className={style.account}>
-        <p>Здесь вы можете изменить свои данные</p>
-        <p>Ваш email: {auth ? auth.email : ""}</p>
+      <h1
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+        }}
+      >
+        Ваши данные
+      </h1>
+      <Container>
+        {removeAccount ? (
+          <Row>
+            <Col className={style.container} xs={10} sm={10} lg={6}>
+              <Alert
+                variant="warning"
+                onClose={() => setRemoveAccount(!removeAccount)}
+                dismissible
+              >
+                <Alert.Heading>Удаление аккаунта</Alert.Heading>
+                <p>
+                  Вы действительно хотите удалить свой аккаунт. Это действие
+                  отменить будет невозможно.
+                </p>
+                <Button variant="danger" onClick={deleteUser}>
+                  Удалить
+                </Button>
+              </Alert>
+            </Col>
+          </Row>
+        ) : (
+          ""
+        )}
+        <Row>
+          <Col className={style.container} xs={10} sm={10} lg={4}>
+            {updateUserState ? (
+              <Alert variant="success">
+                <h5>Данные успешно обновлены</h5>
+              </Alert>
+            ) : (
+              ""
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col className={style.container} xs={10} sm={10} lg={4}>
+            <p>Здесь вы можете изменить свои данные</p>
+          </Col>
+        </Row>
 
-        <input
-          type="text"
-          placeholder="Введите ваше имя"
-          value={fullName}
-          onChange={(e) => dispatch(changeFullName(e.target.value))}
-        />
-        <input
-          type="text"
-          placeholder="Введите вашу фамилию"
-          value={lastName}
-          onChange={(e) => dispatch(changeLastName(e.target.value))}
-        />
-        <div className={style.gender}>
-          <p>Выберите ваш пол:</p>
-          <input
-            type="radio"
-            value="1"
-            checked={gender == "1" ? true : false}
-            onChange={changeGender}
-          />
-          <label>М</label>
-          <input
-            type="radio"
-            value="2"
-            checked={gender == "2" ? true : false}
-            onChange={changeGender}
-          />
-          <label>Ж</label>
-        </div>
-        <input
-          type="tel"
-          placeholder="Введите ваш номер телефона"
-          value={telephone}
-          onChange={(e) => dispatch(changeTelephone(e.target.value))}
-        />
-        <button
-          onClick={() =>
-            chacngeUserData({
-              _id: auth._id,
-              fullName,
-              lastName,
-              gender: man ? man : women,
-              telephone,
-            })
-          }
-        >
-          Изменить
-        </button>
-        <button onClick={deleteUser} className={style.delete}>
-          Удалить аккаунт
-        </button>
-      </div>
+        <Row>
+          <Col className={style.container} xs={10} sm={10} lg={4}>
+            <p>Ваш email: {auth ? auth.email : ""}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={style.container} xs={10} sm={10} lg={4}>
+            <InputGroup className="mb-3">
+              <InputGroup.Text id="basic-addon1">Имя</InputGroup.Text>
+              <Form.Control
+                placeholder="Ваше имя"
+                aria-label="Username"
+                aria-describedby="basic-addon1"
+                value={fullName}
+                onChange={(e) => dispatch(changeFullName(e.target.value))}
+              />
+            </InputGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={style.container} xs={10} sm={10} lg={4}>
+            <InputGroup className="mb-3">
+              <InputGroup.Text id="basic-addon1">Фамилия</InputGroup.Text>
+              <Form.Control
+                placeholder="Ваша фамилия"
+                aria-label="Username"
+                aria-describedby="basic-addon1"
+                value={lastName}
+                onChange={(e) => dispatch(changeLastName(e.target.value))}
+              />
+            </InputGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={style.container} lg={4}>
+            <Form>
+              <Form.Check
+                inline
+                label="М"
+                name="group1"
+                type="radio"
+                id={`inline-radio-1`}
+                value="1"
+                checked={gender == "1" ? true : false}
+                onChange={changeGender}
+              />
+              <Form.Check
+                inline
+                label="Ж"
+                name="group2"
+                type="radio"
+                id={`inline-radio-2`}
+                value="2"
+                checked={gender == "2" ? true : false}
+                onChange={changeGender}
+              />
+            </Form>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={style.container} xs={10} sm={10} lg={4}>
+            <InputGroup className="mb-3">
+              <InputGroup.Text id="basic-addon1">Тел</InputGroup.Text>
+              <Form.Control
+                type="number"
+                placeholder="Ваша телефон"
+                aria-label="Username"
+                aria-describedby="basic-addon1"
+                value={telephone}
+                onChange={(e) => dispatch(changeTelephone(e.target.value))}
+              />
+            </InputGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col
+            style={{
+              marginBottom: "20px",
+            }}
+          >
+            <Button
+              variant="success"
+              onClick={() =>
+                chacngeUserData({
+                  _id: auth._id,
+                  fullName,
+                  lastName,
+                  gender: man ? man : women,
+                  telephone,
+                })
+              }
+            >
+              Изменить
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button onClick={() => setRemoveAccount(true)} variant="danger">
+              Удалить аккаунт
+            </Button>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

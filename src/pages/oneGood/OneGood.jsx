@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import axios from "../../axios";
+import style from "./oneGood.module.css";
 
 const OneGood = () => {
   const [oneGood, setOneGood] = useState();
+  const navigate = useNavigate();
   const { id } = useParams();
+
+  const goBack = () => navigate(-1);
 
   useEffect(() => {
     axios
@@ -16,13 +21,38 @@ const OneGood = () => {
 
   return (
     <div>
-      <h1>Один товар</h1>
+      <h1
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+        }}
+      >
+        Один товар
+      </h1>
       {oneGood ? (
-        <div className="product">
-          <h1>{oneGood.name}</h1>
-          <img src={oneGood.imageUrl} />
-          <p>{oneGood.price} рублей</p>
-        </div>
+        <>
+          <div className="product">
+            <h2
+              style={{
+                marginTop: "20px",
+                marginBottom: "20px",
+              }}
+            >
+              {oneGood.name}
+            </h2>
+            <img src={oneGood.imageUrl} className={style.img} />
+            <p>{oneGood.price} рублей</p>
+          </div>
+          <Button
+            variant="secondary"
+            style={{
+              marginBottom: "30px",
+            }}
+            onClick={goBack}
+          >
+            Назад
+          </Button>
+        </>
       ) : (
         <h1>Секундочку...</h1>
       )}

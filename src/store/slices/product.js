@@ -3,6 +3,12 @@ import axios from "../../axios";
 
 export const fetchGetAllGoods = createAsyncThunk("/goods", async () => {
   const { data } = await axios.get("/goods");
+
+  return data;
+});
+
+export const getTheBestGoods = createAsyncThunk("/bestGoods", async () => {
+  const { data } = await axios.get("/goods");
   window.localStorage.setItem(
     "products",
     JSON.stringify(data.sort(() => 0.5 - Math.random()).slice(0, 3))
@@ -21,6 +27,10 @@ const initialState = {
     status: "loading",
   },
   basket: {
+    data: null,
+    status: "loading",
+  },
+  bestGoods: {
     data: null,
     status: "loading",
   },
@@ -54,6 +64,18 @@ const productSlice = createSlice({
     [getBasketUser.rejected]: (state) => {
       state.basket.status = "error";
       state.basket.data = null;
+    },
+    [getTheBestGoods.pending]: (state) => {
+      state.bestGoods.status = "loading";
+      state.bestGoods.data = null;
+    },
+    [getTheBestGoods.fulfilled]: (state, action) => {
+      state.bestGoods.status = "loaded";
+      state.bestGoods.data = action.payload;
+    },
+    [getTheBestGoods.rejected]: (state) => {
+      state.bestGoods.status = "error";
+      state.bestGoods.data = null;
     },
   },
 });
