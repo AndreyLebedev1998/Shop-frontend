@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Accordion, Container, Row, Col } from "react-bootstrap";
 import axios from "../../axios";
 import style from "./oneGood.module.css";
 
@@ -20,15 +20,7 @@ const OneGood = () => {
   }, []);
 
   return (
-    <div>
-      <h1
-        style={{
-          marginTop: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        Один товар
-      </h1>
+    <Container>
       {oneGood ? (
         <>
           <div className="product">
@@ -43,10 +35,38 @@ const OneGood = () => {
             <img src={oneGood.imageUrl} className={style.img} />
             <p>{oneGood.price} рублей</p>
           </div>
+          <Row>
+            <Col
+              xs={10}
+              sm={10}
+              md={8}
+              lg={8}
+              xl={8}
+              style={{
+                margin: "auto",
+              }}
+            >
+              <Accordion defaultActiveKey="0">
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>Описание</Accordion.Header>
+                  <Accordion.Body>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            </Col>
+          </Row>
           <Button
             variant="secondary"
             style={{
-              marginBottom: "30px",
+              margin: "50px",
             }}
             onClick={goBack}
           >
@@ -56,7 +76,7 @@ const OneGood = () => {
       ) : (
         <h1>Секундочку...</h1>
       )}
-    </div>
+    </Container>
   );
 };
 

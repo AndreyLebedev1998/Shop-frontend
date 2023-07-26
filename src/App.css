@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 a {
@@ -12,15 +14,6 @@ a {
   background-color: rgb(61, 194, 59);
   border-radius: 10px;
 }
-
-/* .container {
-  margin: auto;
-  width: 100%;
-} */
-
-/* .product {
-  margin-left: 30px;
-} */
 
 img {
   width: 160px;

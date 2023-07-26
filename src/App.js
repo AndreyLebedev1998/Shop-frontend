@@ -1,7 +1,6 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { BsBasketFill } from "react-icons/bs";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Keyboard from "./pages/keyboards/Keyboard";
@@ -11,14 +10,12 @@ import Monoblock from "./pages/monoblocks/Monoblock";
 import Mouse from "./pages/mouses/Mouse";
 import Home from "./pages/Home";
 import Header from "./components/Header/Header";
-import axios from "./axios";
 import {
   fetchGetAllGoods,
   getBasketUser,
   getTheBestGoods,
 } from "./store/slices/product";
 import OneGood from "./pages/oneGood/OneGood";
-import Footer from "./components/Footer/Footer";
 import Entry from "./pages/Entry/Entry";
 import Register from "./pages/Register/Register";
 import { getAuthMe } from "./store/slices/authorization";
@@ -29,6 +26,7 @@ import DeliveryControl from "./pages/DeliveryControl/DeliveryControl";
 import OneDelivery from "./pages/OneDelivery/OneDelivery";
 import DeliveryUser from "./pages/DeliveryUser/DeliveryUser";
 import DeliveryOneUser from "./pages/DeliveryOneUser/DeliveryOneUser";
+import { getDeliveryUser } from "./store/slices/delivery";
 
 function App() {
   const auth = useSelector((state) => state.auth.auth.data);
@@ -40,6 +38,7 @@ function App() {
     dispatch(getTheBestGoods());
     dispatch(getAuthMe());
     dispatch(getBasketUser(authId));
+    dispatch(getDeliveryUser(authId));
   }, []);
 
   return (
@@ -65,7 +64,6 @@ function App() {
           path="/deliveryOneUser/:id/:authId"
           element={<DeliveryOneUser />}
         />
-        <Route path="/test" element={<Footer />} />
       </Routes>
     </div>
   );

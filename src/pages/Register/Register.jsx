@@ -8,11 +8,10 @@ import {
   Button,
   Form,
   InputGroup,
-  Alert,
+  Modal,
 } from "react-bootstrap";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { register } from "../../store/slices/authorization";
-import style from "./register.module.css";
 
 const Register = () => {
   const auth = useSelector((state) => state.auth.auth.data);
@@ -20,6 +19,10 @@ const Register = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   if (auth) {
     window.localStorage.setItem("token", auth.token);
@@ -31,6 +34,21 @@ const Register = () => {
 
   return (
     <>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Введите корректные данные</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Имя должно составлять не менее 3 символов</p>
+          <p>Введите корректный email</p>
+          <p>Пароль должен быть не менее 5 символов</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <h1>Регистрация</h1>
       <Container>
         <Row>
@@ -113,9 +131,7 @@ const Register = () => {
           onClick={() =>
             dispatch(register({ fullName, email, password })).then((res) => {
               if (res.error) {
-                alert(
-                  "Имя должно составлять не менее 3 символов\nВведите корректный email\nПароль должен быть не менее 5 символов"
-                );
+                handleShow();
               }
             })
           }

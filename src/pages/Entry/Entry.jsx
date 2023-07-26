@@ -8,7 +8,7 @@ import {
   Button,
   Form,
   InputGroup,
-  Alert,
+  Modal,
 } from "react-bootstrap";
 import { RiLockPasswordFill } from "react-icons/ri";
 import style from "./entry.module.css";
@@ -19,11 +19,15 @@ const Entry = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const entry = (params) => {
     dispatch(authorization(params)).then((res) => {
       if (res.error) {
-        alert("Неправильный логин или пароль");
+        handleShow();
       }
     });
   };
@@ -39,6 +43,17 @@ const Entry = () => {
   return (
     <>
       <h1>Вход</h1>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Проверьте правильность данных</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Неправильный логин или пароль</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Закрыть
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Container>
         <Row>
           <Col

@@ -64,7 +64,7 @@ const Keyboard = () => {
                       marginBottom: "20px",
                     }}
                   >
-                    <h3>{el.name}</h3>
+                    <h4>{el.name}</h4>
                     <Link to={`/goods/${el._id}`}>
                       <img src={el.imageUrl} />
                     </Link>

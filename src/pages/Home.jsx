@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button, Container, Row, Col } from "react-bootstrap";
@@ -11,8 +11,6 @@ import {
 const Home = () => {
   const products = JSON.parse(window.localStorage.getItem("products"));
   const basket = useSelector((state) => state.basket.basket.data);
-  const basketPlus = useSelector((state) => state.basket.basketPlus.data);
-  const buyOneGoodinBasket = useSelector((state) => state.basket.buyGood.data);
   const auth = useSelector((state) => state.auth.auth.data);
   const dispatch = useDispatch();
 
@@ -71,7 +69,7 @@ const Home = () => {
                     marginBottom: "20px",
                   }}
                 >
-                  <h3>{el.name}</h3>
+                  <h4>{el.name}</h4>
                   <Link to={`/goods/${el._id}`}>
                     <img src={el.imageUrl} />
                   </Link>

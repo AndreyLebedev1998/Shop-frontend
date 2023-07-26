@@ -2,11 +2,9 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import style from "./deliveryUser.module.css";
 import {
   getDeliveryUser,
   deleteOneDelivery,
-  getAllDeliveryUsers,
 } from "../../store/slices/delivery";
 
 const DeliveryUser = () => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Row, Col } from "react-bootstrap";
@@ -11,8 +11,6 @@ import {
 const Headphone = () => {
   const products = useSelector((state) => state.product.good.data);
   const basket = useSelector((state) => state.basket.basket.data);
-  const basketPlus = useSelector((state) => state.basket.basketPlus.data);
-  const buyOneGoodinBasket = useSelector((state) => state.basket.buyGood.data);
   const auth = useSelector((state) => state.auth.auth.data);
   const dispatch = useDispatch();
 
@@ -67,7 +65,7 @@ const Headphone = () => {
                       marginBottom: "20px",
                     }}
                   >
-                    <h3>{el.name}</h3>
+                    <h4>{el.name}</h4>
                     <Link to={`/goods/${el._id}`}>
                       <img src={el.imageUrl} />
                     </Link>

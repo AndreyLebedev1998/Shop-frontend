@@ -89,7 +89,6 @@ const Delivery = () => {
   return (
     <Container>
       <h1>Доставка</h1>
-      Свердловская область, Новоуральск, Автозаводская улица, 21
       {allRight ? (
         <h3>Проверьте правильность введенных вами данных</h3>
       ) : (
@@ -234,19 +233,19 @@ const Delivery = () => {
       )}
       {allRight ? (
         <>
-          <div>
+          <Row>
             <h1>Ваш заказ</h1>
             {basket
               ? basket.map((el) => {
                   return (
-                    <div className="product">
+                    <Col xs={6} sm={6} md={4} lg={4}>
                       <h1>{el.name}</h1>
                       <Link to={`/goods/${el._id}`}>
                         <img src={el.imageUrl} />
                       </Link>
                       <p>{el.price} рублей</p>
                       <p>Колличество: {el.qtyInBasket}</p>
-                    </div>
+                    </Col>
                   );
                 })
               : ""}
@@ -261,7 +260,7 @@ const Delivery = () => {
             ) : (
               <h2>Коризна пустая</h2>
             )}
-          </div>
+          </Row>
         </>
       ) : (
         ""
@@ -295,6 +294,11 @@ const Delivery = () => {
       ) : (
         ""
       )}
+      <Row
+        style={{
+          margin: "40px",
+        }}
+      ></Row>
     </Container>
   );
 };
