@@ -8,11 +8,12 @@ export const fetchGetAllGoods = createAsyncThunk("/goods", async () => {
 });
 
 export const getTheBestGoods = createAsyncThunk("/bestGoods", async () => {
-  const { data } = await axios.get("/goods");
-  window.localStorage.setItem(
+  let { data } = await axios.get("/goods");
+  /* data = window.localStorage.setItem(
     "products",
     JSON.stringify(data.sort(() => 0.5 - Math.random()).slice(0, 3))
   );
+  console.log(data); */
   return data;
 });
 
@@ -39,7 +40,18 @@ const initialState = {
 const productSlice = createSlice({
   name: "product",
   initialState,
-  reducers: {},
+  reducers: {
+    getBestProducts: (state) => {
+      if (state.bestGoods.data !== null) {
+        window.localStorage.setItem(
+          "products",
+          JSON.stringify(
+            state.bestGoods.data.sort(() => 0.5 - Math.random()).slice(0, 3)
+          )
+        );
+      }
+    },
+  },
   extraReducers: {
     [fetchGetAllGoods.pending]: (state) => {
       state.good.status = "loading";
@@ -81,3 +93,5 @@ const productSlice = createSlice({
 });
 
 export const productReducer = productSlice.reducer;
+
+export const { getBestProducts } = productSlice.actions;

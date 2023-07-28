@@ -14,11 +14,10 @@ const DeliveryUser = () => {
   );
   const auth = useSelector((state) => state.auth.auth.data);
   const token = window.localStorage.getItem("token");
+  const authId = JSON.parse(window.localStorage.getItem("auth"));
 
   useEffect(() => {
-    if (auth) {
-      dispatch(getDeliveryUser(auth._id));
-    }
+    dispatch(getDeliveryUser(authId));
   }, []);
 
   const deleteDelivery = (params) => {
